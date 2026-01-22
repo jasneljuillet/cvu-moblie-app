@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "cvu app",
+    "slug": "cvu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/cvu-official.png",
+    "scheme": "cvu",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jasneljuillet.cvu",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jasneljuillet.cvu"
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/cvu-official.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/cvu-official.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "showName": false,
+          "dark": {
+            "backgroundColor": "#000000"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bda900da-128e-4cb0-b098-4f0f038a7eee"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/bda900da-128e-4cb0-b098-4f0f038a7eee"
+    }
+  }
+}
