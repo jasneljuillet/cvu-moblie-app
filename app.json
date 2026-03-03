@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "cvu app",
+    "name": "",
     "slug": "cvu",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/cvu-official.png",
     "scheme": "cvu",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    // "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.jasneljuillet.cvu",
@@ -19,7 +19,7 @@
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE"
       },
-      "edgeToEdgeEnabled": true,
+      // "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.jasneljuillet.cvu"
     },
