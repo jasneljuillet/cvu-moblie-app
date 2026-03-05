@@ -1,10 +1,10 @@
-// AboutUsScreen.js
 import axios from "axios";
-import { useEffect, useState } from "react";
+import LottieView from "lottie-react-native";
+import { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Dimensions,
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,24 +14,36 @@ import { Avatar, Card } from "react-native-paper";
 
 const AboutUsScreen = () => {
   const [persons, setPersons] = useState([]);
-  const [loading, setLoading] = useState(true); // 👈
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchPersons = async () => {
+    try {
+      const res = await axios.get(
+        "https://cvu-backend.onrender.com/api/persons"
+      );
+      const filtered = res.data.filter((person) => {
+        const hasPlayerRole = person.roles.some(
+          (r) => r.role?.name === "PLAYER"
+        );
+        return !hasPlayerRole;
+      });
+      setPersons(filtered);
+    } catch (err) {
+      console.error("Error fetching persons:", err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    axios
-      .get("https://cvu-backend.onrender.com/api/persons")
-      .then((res) => {
-        const filtered = res.data.filter((person) => {
-          const hasPlayerRole = person.roles.some(
-            (r) => r.role?.name === "PLAYER"
-          );
-          return !hasPlayerRole;
-        });
-        setPersons(filtered);
-      })
-      .catch((err) => {
-        console.error("Error fetching persons:", err);
-      })
-      .finally(() => setLoading(false)); // 👈
+    fetchPersons();
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchPersons();
   }, []);
 
   const renderMember = ({ item }) => (
@@ -51,15 +63,33 @@ const AboutUsScreen = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 0.9 }}>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={["#5BF62F"]}
+        />
+      }
+    >
+      {/* Custom loader pou refresh */}
+      {refreshing && (
+        <View style={{ alignItems: "center", marginVertical: 20 }}>
+          <LottieView
+            source={require("./SandyLoading.json")}
+            autoPlay
+            loop
+            style={{ width: 120, height: 120 }}
+          />
+          <Text style={{ marginTop: 8, color: "#5BF62F" }}></Text>
+        </View>
+      )}
+
       {/* About Section */}
       <View style={styles.aboutSection}>
         <Text style={styles.teamTitle}>Team introduction</Text>
         <Text style={styles.aboutText}>
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
           Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
         </Text>
       </View>
@@ -68,13 +98,21 @@ const AboutUsScreen = () => {
       <View style={styles.teamSection}>
         <Text style={styles.teamTitle}>Head Team</Text>
 
-        {loading ? ( // 👈 spinner pandan loading
-          <ActivityIndicator
-            size="large"
-            color="#5BF62F"
-            style={{ marginTop: 20 }}
-          />
-        ) : persons.length === 0 ? ( // 👈 fallback si pa gen done
+        {loading ? (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <LottieView
+              source={require("./SandyLoading.json")}
+              autoPlay
+              loop
+              style={{ width: 150, height: 150 }}
+            />
+            <Text style={{ marginTop: 10, color: "#5BF62F" }}>
+              {/* Ap chaje manm yo... */}
+            </Text>
+          </View>
+        ) : persons.length === 0 ? (
           <Text style={{ textAlign: "center", marginTop: 20 }}>
             Pa gen manm pou montre
           </Text>
@@ -96,7 +134,6 @@ const AboutUsScreen = () => {
 const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  // ... rete menm jan ak ou te genyen
   card: {
     width: width * 0.5,
     marginRight: 15,
