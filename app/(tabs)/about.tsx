@@ -229,8 +229,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginVertical: 20,
-    paddingHorizontal: 10,
-    backgroundColor: "#f5f5f5", // ti background gri
+    paddingHorizontal: 10, // ti background gri
     borderRadius: 12,
     paddingVertical: 1,
   },
