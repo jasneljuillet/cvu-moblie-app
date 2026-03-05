@@ -51,7 +51,7 @@ const AboutUsScreen = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 0.9 }}>
       {/* About Section */}
       <View style={styles.aboutSection}>
         <Text style={styles.teamTitle}>Team introduction</Text>
