@@ -1,7 +1,8 @@
 import axios from "axios";
 import LottieView from "lottie-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Animated,
   Dimensions,
   FlatList,
   RefreshControl,
@@ -13,6 +14,7 @@ import {
 import { Avatar, Card } from "react-native-paper";
 
 const AboutUsScreen = () => {
+  const data = [{ founded: 2021, members: 20, partners: 0 }];
   const [persons, setPersons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -36,6 +38,15 @@ const AboutUsScreen = () => {
       setRefreshing(false);
     }
   };
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
 
   useEffect(() => {
     fetchPersons();
@@ -79,7 +90,7 @@ const AboutUsScreen = () => {
       {refreshing && (
         <View style={{ alignItems: "center", marginVertical: 20 }}>
           <LottieView
-            source={require("./SandyLoading.json")}
+            source={require("./Materialwaveloading.json")}
             autoPlay
             loop
             style={{ width: 120, height: 120 }}
@@ -90,7 +101,15 @@ const AboutUsScreen = () => {
 
       {/* About Section */}
       <View style={styles.aboutSection}>
-        <Text style={styles.teamTitle}>Team introduction</Text>
+        <View style={{ alignItems: "center" }}>
+          <LottieView
+            source={require("./Basketball.json")} // mete yon animasyon bèl nan assets
+            autoPlay
+            loop
+            style={{ width: 120, height: 120 }}
+          />
+        </View>
+        <Text style={styles.teamTitle}>San Limit United</Text>
         <Text style={styles.aboutText}>
           Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
           Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
@@ -102,17 +121,34 @@ const AboutUsScreen = () => {
           Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
         </Text>
       </View>
+      {/* table */}
+
+      <View style={styles.statsSection}>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Founded</Text>
+          <Text style={styles.statNumber}>2021</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Members</Text>
+          <Text style={styles.statNumber}>20</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Partners</Text>
+          <Text style={styles.statNumber}>0</Text>
+        </View>
+      </View>
+      {/* end */}
 
       {/* Team Section */}
       <View style={styles.teamSection}>
-        <Text style={styles.teamTitle}>Head Team</Text>
+        <Text style={styles.teamTitle}>Executive Board</Text>
 
         {loading ? (
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <LottieView
-              source={require("./SandyLoading.json")}
+              source={require("./Materialwaveloading.json")}
               autoPlay
               loop
               style={{ width: 150, height: 150 }}
@@ -123,7 +159,7 @@ const AboutUsScreen = () => {
           </View>
         ) : persons.length === 0 ? (
           <Text style={{ textAlign: "center", marginTop: 20 }}>
-            Pa gen manm pou montre
+            {/* Pa gen manm pou montre */}
           </Text>
         ) : (
           <FlatList
@@ -188,6 +224,29 @@ const styles = StyleSheet.create({
     color: "#333",
     lineHeight: 22,
     textAlign: "center",
+  },
+  statsSection: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 20,
+    paddingHorizontal: 10,
+    backgroundColor: "#f5f5f5", // ti background gri
+    borderRadius: 12,
+    paddingVertical: 1,
+  },
+  statBox: {
+    alignItems: "center",
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#5BF62F", // vèt klere
+  },
+  statLabel: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    marginTop: 4,
   },
 });
 
