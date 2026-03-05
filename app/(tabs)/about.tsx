@@ -54,7 +54,9 @@ const AboutUsScreen = () => {
         style={styles.avatar}
       />
       <View style={styles.cardText}>
-        <Text style={styles.name}>{`${item.firstname} ${item.lastname}`}</Text>
+        <Text style={styles.name}>{`${
+          item.firstname
+        } ${item.lastname.toUpperCase()}`}</Text>
         <Text style={styles.role}>
           {item.roles.map((r) => r.role.name).join(", ")}
         </Text>
