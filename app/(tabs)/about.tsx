@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     color: "#5BF62F", // vèt klere
   },
   statLabel: {
-    fontSize: 14,
+    fontSize: 17,
     fontWeight: "bold",
     color: "#333",
     marginTop: 4,
