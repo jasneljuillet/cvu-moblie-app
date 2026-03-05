@@ -1,4 +1,6 @@
 // AboutUsScreen.js
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -37,18 +39,41 @@ const teamMembers = [
   },
   // Ou ka ajoute plis manb isit la
 ];
-
 const AboutUsScreen = () => {
+  const [persons, setPersons] = useState([]);
+  // import axios from "axios";
+  useEffect(() => {
+    axios
+      .get("https://cvu-backend.onrender.com/api/persons")
+      .then((res) => {
+        // Filtre: kenbe sèlman moun ki pa gen okenn role "PLAYER"
+        const filtered = res.data.filter((person: any) => {
+          // Si gen yon role "PLAYER" nan lis roles yo, nou retire l
+          const hasPlayerRole = person.roles.some(
+            (r: any) => r.role?.name === "PLAYER"
+          );
+          return !hasPlayerRole;
+        });
+
+        setPersons(filtered);
+      })
+      .catch((err) => {
+        console.error("Error fetching persons:", err);
+      });
+  }, []);
+
   const renderMember = ({ item }) => (
     <Card style={styles.card}>
       <Avatar.Image
         size={150}
-        source={{ uri: item.photo }}
+        source={{ uri: item.avatarProfile }}
         style={styles.avatar}
       />
       <View style={styles.cardText}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.role}>{item.role}</Text>
+        <Text style={styles.name}>{`${item.firstname} ${item.lastname}`}</Text>
+        <Text style={styles.role}>
+          {item.roles.map((r) => r.role.name).join(", ")}
+        </Text>
       </View>
     </Card>
   );
@@ -92,7 +117,7 @@ const AboutUsScreen = () => {
       <View style={styles.teamSection}>
         <Text style={styles.teamTitle}>Head Team</Text>
         <FlatList
-          data={teamMembers}
+          data={persons}
           renderItem={renderMember}
           keyExtractor={(item) => item.id}
           horizontal
