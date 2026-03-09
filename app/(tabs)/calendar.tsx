@@ -1,10 +1,11 @@
+import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   Modal,
   Pressable,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -17,21 +18,24 @@ export default function CalendarScreen() {
   const [matches, setMatches] = useState<any[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/refs/heads/main/data/season2026.json"
+      );
+      const data = await res.json();
+      setMatches(data);
+    } catch (err) {
+      console.error("Error fetching calendar:", err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/refs/heads/main/data/season2026.json"
-        );
-        const data = await res.json();
-        setMatches(data);
-      } catch (err) {
-        console.error("Error fetching calendar:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
@@ -39,7 +43,13 @@ export default function CalendarScreen() {
     return (
       <SafeAreaView style={styles.safe}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#5BF62F" />
+          {/* Lottie loader nan mitan ekran an */}
+          <LottieView
+            source={require("./Basketball.json")} // mete chemen animasyon ou telechaje a
+            autoPlay
+            loop
+            style={{ width: 180, height: 180 }}
+          />
           <Text style={styles.loadingText}>Loading schedule...</Text>
         </View>
       </SafeAreaView>
@@ -49,7 +59,7 @@ export default function CalendarScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        {/* ===== HEADER ===== */}
+        {/* HEADER */}
         <View style={styles.header}>
           <Text style={styles.title}>Official Schedule – Season 2026</Text>
           <Text style={styles.subtitle}>
@@ -62,12 +72,23 @@ export default function CalendarScreen() {
           </View>
         </View>
 
-        {/* ===== MATCH LIST ===== */}
+        {/* MATCH LIST */}
         <FlatList
           data={matches}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+                fetchData();
+              }}
+              colors={["#5BF62F"]}
+              tintColor="#5BF62F"
+            />
+          }
           renderItem={({ item }) => (
             <Pressable onPress={() => setSelectedMatch(item)}>
               <View style={styles.card}>
@@ -154,7 +175,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center", // mitan vètikal
+    alignItems: "center", // mitan orizontal
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#5BF62F",
+    fontWeight: "600",
+  },
   /* HEADER */
   header: {
     paddingHorizontal: 20,
@@ -307,16 +338,5 @@ const styles = StyleSheet.create({
   closeText: {
     fontWeight: "800",
     fontSize: 14,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: "#5BF62F",
-    fontWeight: "600",
   },
 });
