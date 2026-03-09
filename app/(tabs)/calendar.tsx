@@ -1,6 +1,6 @@
-import { Match, calendarData } from "@/data/saeson2026";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Modal,
@@ -14,7 +14,37 @@ import {
 const CVULogo = require("../../assets/images/cvu-official.png");
 
 export default function CalendarScreen() {
-  const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+  const [matches, setMatches] = useState<any[]>([]);
+  const [selectedMatch, setSelectedMatch] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/refs/heads/main/data/season2026.json"
+        );
+        const data = await res.json();
+        setMatches(data);
+      } catch (err) {
+        console.error("Error fetching calendar:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#5BF62F" />
+          <Text style={styles.loadingText}>Loading schedule...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -22,11 +52,9 @@ export default function CalendarScreen() {
         {/* ===== HEADER ===== */}
         <View style={styles.header}>
           <Text style={styles.title}>Official Schedule – Season 2026</Text>
-
           <Text style={styles.subtitle}>
             Follow all CVU games from the regular season to the playoffs.
           </Text>
-
           <View style={styles.legend}>
             <Text style={styles.legendText}>🟢 Upcoming match</Text>
             <Text style={styles.legendText}>⭐ Best Player</Text>
@@ -36,7 +64,7 @@ export default function CalendarScreen() {
 
         {/* ===== MATCH LIST ===== */}
         <FlatList
-          data={calendarData}
+          data={matches}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
@@ -55,13 +83,12 @@ export default function CalendarScreen() {
                 <Text style={styles.teamNames}>
                   CVU vs {item.opponent.name}
                 </Text>
-
                 <Text style={styles.score}>{item.score}</Text>
 
                 {item.bestPlayer && (
                   <View style={styles.bestPlayer}>
                     <Image
-                      source={item.bestPlayer.photo}
+                      source={{ uri: item.bestPlayer.photo }}
                       style={styles.playerImage}
                     />
                     <View>
@@ -280,5 +307,16 @@ const styles = StyleSheet.create({
   closeText: {
     fontWeight: "800",
     fontSize: 14,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#5BF62F",
+    fontWeight: "600",
   },
 });
