@@ -70,5 +70,113 @@
     "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
     "weight": 67,
     "height": 185
+  },
+    {
+    "id": 7,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 8,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 9,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 10,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 11,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 12,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 13,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 14,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
+  },
+    {
+    "id": 15,
+    "firstName": "Marc",
+    "lastName": "Duval",
+    "birthDate": "1999-09-22",
+    "position": "C",
+    "jerseyNumber": 1,
+    "contractUntil": "2025",
+    "photo": "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/assets/images/6.jpg",
+    "weight": 67,
+    "height": 185
   }
 ]
