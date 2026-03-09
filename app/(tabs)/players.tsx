@@ -166,6 +166,14 @@ export default function PlayersScreen() {
           </View>
         </View>
       </Modal>
+
+      {/* ===== FOOTER ===== */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Talent. Heart. Determination. This is our roster.
+        </Text>
+        {/* <Text style={styles.motivation}>Go CVU 🔥 Every game matters.</Text> */}
+      </View>
     </SafeAreaView>
   );
 }
@@ -250,4 +258,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   closeText: { color: "#000", fontWeight: "700" },
+  /* FOOTER */
+  footer: {
+    paddingVertical: 18,
+    alignItems: "center",
+  },
+  footerText: {
+    color: "#888",
+    fontSize: 12,
+    marginBottom: 6,
+  },
+  motivation: {
+    color: "#5BF62F",
+    fontSize: 14,
+    fontWeight: "700",
+  },
 });
