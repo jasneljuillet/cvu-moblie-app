@@ -5,7 +5,9 @@ import {
   Image,
   Modal,
   Pressable,
+  RefreshControl,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -18,6 +20,7 @@ export default function PlayersScreen() {
   const [selectedPosition, setSelectedPosition] = useState("ALL");
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -30,6 +33,7 @@ export default function PlayersScreen() {
       console.error("Error fetching players:", err);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -47,7 +51,7 @@ export default function PlayersScreen() {
       <SafeAreaView style={styles.safe}>
         <View style={styles.loadingContainer}>
           <LottieView
-            source={require("./Basketball.json")} // animasyon ou telechaje a
+            source={require("./Basketball.json")}
             autoPlay
             loop
             style={{ width: 200, height: 200 }}
@@ -85,9 +89,20 @@ export default function PlayersScreen() {
         ))}
       </View>
 
-      {/* LIST */}
-      {/* LIST */}
-      <View style={styles.grid}>
+      {/* LIST WITH PULL-TO-REFRESH */}
+      <ScrollView
+        contentContainerStyle={styles.grid}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              fetchData();
+            }}
+            tintColor="#5BF62F"
+          />
+        }
+      >
         {filteredPlayers.map((player) => (
           <Pressable
             key={player.id}
@@ -99,11 +114,11 @@ export default function PlayersScreen() {
               {player.firstName} {player.lastName}
             </Text>
             <Text style={styles.gridNumber}>
-              #{player.jerseyNumber} • {player.position}
+              {player.jerseyNumber} • {player.position}
             </Text>
           </Pressable>
         ))}
-      </View>
+      </ScrollView>
 
       {/* MODAL */}
       <Modal
@@ -159,8 +174,8 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "white" },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center", // mitan vètikal
-    alignItems: "center", // mitan orizontal
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     marginTop: 12,
@@ -170,7 +185,6 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     flexDirection: "row",
-    marginLeft: 12,
     marginTop: 12,
     marginBottom: 16,
     paddingHorizontal: 16,
@@ -181,26 +195,34 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 8,
   },
-  card: {
+  grid: {
     flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+  gridCard: {
+    width: "48%",
     backgroundColor: "#111",
-    borderRadius: 16,
-    marginBottom: 12,
+    borderRadius: 12,
+    marginBottom: 16,
     overflow: "hidden",
+    alignItems: "center",
   },
-  image: {
-    flex: 0.4,
-    height: 150,
-    borderTopLeftRadius: 16,
-    borderBottomLeftRadius: 16,
+  gridImage: {
+    width: "100%",
+    height: 140,
   },
-  info: {
-    flex: 0.6,
-    padding: 12,
-    justifyContent: "center",
+  gridName: {
+    color: "#fff",
+    fontWeight: "700",
+    marginTop: 6,
   },
-  number: { color: "#5BF62F", fontWeight: "700", fontSize: 14 },
-  name: { color: "#fff", fontSize: 16, fontWeight: "600", marginTop: 2 },
+  gridNumber: {
+    color: "#5BF62F",
+    fontSize: 13,
+  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",
@@ -228,31 +250,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   closeText: { color: "#000", fontWeight: "700" },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-  },
-  gridCard: {
-    width: "48%",
-    backgroundColor: "#111",
-    borderRadius: 12,
-    marginBottom: 16,
-    overflow: "hidden",
-    alignItems: "center",
-  },
-  gridImage: {
-    width: "100%",
-    height: 140,
-  },
-  gridName: {
-    color: "#fff",
-    fontWeight: "700",
-    marginTop: 6,
-  },
-  gridNumber: {
-    color: "#5BF62F",
-    fontSize: 13,
-  },
 });
