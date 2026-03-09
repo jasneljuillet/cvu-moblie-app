@@ -2,7 +2,6 @@
 import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
 import {
-  FlatList,
   Image,
   Modal,
   Pressable,
@@ -87,28 +86,24 @@ export default function PlayersScreen() {
       </View>
 
       {/* LIST */}
-      <FlatList
-        data={filteredPlayers}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
+      {/* LIST */}
+      <View style={styles.grid}>
+        {filteredPlayers.map((player) => (
           <Pressable
-            onPress={() => setSelectedPlayer(item)}
-            style={styles.card}
+            key={player.id}
+            onPress={() => setSelectedPlayer(player)}
+            style={styles.gridCard}
           >
-            <Image source={{ uri: item.photo }} style={styles.image} />
-            <View style={styles.info}>
-              <Text style={styles.name}>
-                {item.firstName} {item.lastName}
-              </Text>
-              <Text style={styles.number}>
-                #{item.jerseyNumber} • {item.position}
-              </Text>
-            </View>
+            <Image source={{ uri: player.photo }} style={styles.gridImage} />
+            <Text style={styles.gridName}>
+              {player.firstName} {player.lastName}
+            </Text>
+            <Text style={styles.gridNumber}>
+              #{player.jerseyNumber} • {player.position}
+            </Text>
           </Pressable>
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
-      />
+        ))}
+      </View>
 
       {/* MODAL */}
       <Modal
@@ -175,6 +170,7 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     flexDirection: "row",
+    marginLeft: 12,
     marginTop: 12,
     marginBottom: 16,
     paddingHorizontal: 16,
@@ -232,4 +228,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   closeText: { color: "#000", fontWeight: "700" },
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+  },
+  gridCard: {
+    width: "48%",
+    backgroundColor: "#111",
+    borderRadius: 12,
+    marginBottom: 16,
+    overflow: "hidden",
+    alignItems: "center",
+  },
+  gridImage: {
+    width: "100%",
+    height: 140,
+  },
+  gridName: {
+    color: "#fff",
+    fontWeight: "700",
+    marginTop: 6,
+  },
+  gridNumber: {
+    color: "#5BF62F",
+    fontSize: 13,
+  },
 });
