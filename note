@@ -1,1 +1,5 @@
 git pull origin main --rebase
+
+eas build -p android --profile preview
+eas build
+eas update --branch main --message "latest update"
