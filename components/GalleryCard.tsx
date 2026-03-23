@@ -1,8 +1,9 @@
-import { MediaItem } from "@/data/gallery";
 import { Ionicons } from "@expo/vector-icons";
+import { Video } from "expo-av"; // ✅ pou SDK 50
 import { Image as ExpoImage } from "expo-image";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
+import { MediaItem } from "./MasonryGallery";
 
 type Props = {
   item: MediaItem;
@@ -20,10 +21,9 @@ export default function GalleryCard({ item, onPress }: Props) {
         marginHorizontal: 8,
         marginBottom: 14,
         overflow: "hidden",
-        backgroundColor: "#000", // background nwa
+        backgroundColor: "#000",
       }}
     >
-      {/* PLACEHOLDER */}
       {!loaded && (
         <View
           style={{
@@ -32,31 +32,33 @@ export default function GalleryCard({ item, onPress }: Props) {
             left: 0,
             right: 0,
             height: item.height,
-            backgroundColor: "#111", // placeholder nwa
+            backgroundColor: "#111",
             borderRadius: 18,
             zIndex: 1,
           }}
         />
       )}
 
-      {/* IMAGE / VIDEO THUMB */}
-      <ExpoImage
-        source={
-          item.type === "image"
-            ? item.source
-            : require("../assets/images/4.jpg") // thumbnail videyo lokal
-        }
-        style={{
-          width: "100%",
-          height: item.height,
-        }}
-        contentFit="cover"
-        transition={300}
-        cachePolicy="memory-disk"
-        onLoadEnd={() => setLoaded(true)}
-      />
+      {item.type === "image" ? (
+        <ExpoImage
+          source={{ uri: item.source }}
+          style={{ width: "100%", height: item.height }}
+          contentFit="cover"
+          transition={300}
+          cachePolicy="memory-disk"
+          onLoadEnd={() => setLoaded(true)}
+        />
+      ) : (
+        <Video
+          source={{ uri: item.source }}
+          style={{ width: "100%", height: item.height }}
+          resizeMode="cover"
+          isMuted
+          shouldPlay={false}
+          onLoad={() => setLoaded(true)}
+        />
+      )}
 
-      {/* ▶️ BADGE VIDEO */}
       {item.type === "video" && (
         <View
           style={{

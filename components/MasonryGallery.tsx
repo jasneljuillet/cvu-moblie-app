@@ -1,40 +1,53 @@
-import { MediaItem } from "@/data/gallery";
 import MasonryList from "@react-native-seoul/masonry-list";
-import { useState } from "react";
-import { Platform, RefreshControl, View } from "react-native";
+import LottieView from "lottie-react-native";
+import { useEffect, useState } from "react";
+import { Platform, View } from "react-native";
 import GalleryCard from "./GalleryCard";
+
+export type MediaItem = {
+  id: string;
+  type: "image" | "video";
+  source: string;
+  height: number;
+};
 
 type Props = {
   data: MediaItem[];
   onPress: (item: MediaItem) => void;
-  onRefreshData: () => MediaItem[];
-  backgroundColor?: string; // customizable
-  spinnerColor?: string; // spinner kontraste
+  onRefreshData: () => Promise<MediaItem[]>;
+  backgroundColor?: string;
 };
 
 export default function MasonryGallery({
   data,
   onPress,
   onRefreshData,
-  backgroundColor = "#fff", // default nwa
-  spinnerColor = "#5BF62F", // default vèt
+  backgroundColor = "#fff",
 }: Props) {
   const [refreshing, setRefreshing] = useState(false);
-  const [items, setItems] = useState(data);
-  const [version, setVersion] = useState(0); // fòse MasonryList re-render
+  const [items, setItems] = useState<MediaItem[]>([]);
+  const [version, setVersion] = useState(0);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-
-    setTimeout(() => {
-      const newItems = onRefreshData().map((item) => ({
+  useEffect(() => {
+    setItems(
+      data.map((item) => ({
         ...item,
         refreshId: Math.random().toString(),
-      }));
-      setItems(newItems);
-      setVersion((prev) => prev + 1);
-      setRefreshing(false);
-    }, 500);
+      }))
+    );
+  }, [data]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    const newItems = await onRefreshData();
+    setItems(
+      newItems.map((item) => ({
+        ...item,
+        refreshId: Math.random().toString(),
+      }))
+    );
+    setVersion((prev) => prev + 1);
+    setRefreshing(false);
   };
 
   return (
@@ -43,11 +56,9 @@ export default function MasonryGallery({
         data={items}
         extraData={version}
         numColumns={2}
-        keyExtractor={(item) => item.id + item.refreshId}
+        keyExtractor={(item) => item.id + (item.refreshId ?? "")}
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{
-          gap: 12,
-        }}
+        columnWrapperStyle={{ gap: 12 }}
         contentContainerStyle={{
           paddingHorizontal: 12,
           paddingTop: Platform.OS === "ios" ? 120 : 140,
@@ -56,14 +67,21 @@ export default function MasonryGallery({
         renderItem={({ item }) => (
           <GalleryCard item={item} onPress={() => onPress(item)} />
         )}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={spinnerColor} // iOS
-            colors={[spinnerColor]} // Android
-          />
+        // Custom loader header
+        ListHeaderComponent={
+          refreshing ? (
+            <View style={{ alignItems: "center", marginVertical: 20 }}>
+              <LottieView
+                source={require("../app/(tabs)/Basketball.json")}
+                autoPlay
+                loop
+                style={{ width: 100, height: 100 }}
+              />
+            </View>
+          ) : null
         }
+        onRefresh={onRefresh}
+        refreshing={refreshing}
       />
     </View>
   );
