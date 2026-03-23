@@ -22,6 +22,7 @@ export default function GalleryItem({ item, onPress }) {
             resizeMode="cover"
             shouldPlay={true}
             isMuted
+            isLooping={true}
           />
           {/* 🔹 Play badge */}
           <View style={styles.playBadge}>

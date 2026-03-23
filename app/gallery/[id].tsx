@@ -111,7 +111,7 @@ export default function GalleryDetail() {
           }}
           resizeMode="cover"
           shouldPlay
-          isLooping
+          isLooping={true}
           useNativeControls
         />
       )}
