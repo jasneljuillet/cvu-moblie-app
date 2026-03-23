@@ -1,8 +1,9 @@
 import GalleryGrid from "@/components/GalleryGrid";
-import { galleryData, MediaItem } from "@/data/gallery";
 import { Ionicons } from "@expo/vector-icons";
-import { Video } from "expo-av"; // ✅ IMPORT VIDEO
+import { Video } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import LottieView from "lottie-react-native"; // ✅ import Lottie
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -10,16 +11,74 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  View,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
 
+export type MediaItem = {
+  id: string;
+  type: "image" | "video";
+  source: string;
+  height: number;
+};
+
+function randomHeight(min = 240, max = 340) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function GalleryDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
+  const [data, setData] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const selected = galleryData.find((i) => i.id === id);
-  const others = galleryData.filter((i) => i.id !== id);
+  const fetchGallery = async (): Promise<MediaItem[]> => {
+    try {
+      const res = await fetch(
+        "https://raw.githubusercontent.com/jasneljuillet/cvu-moblie-app/main/data/gallery.json"
+      );
+      const json = await res.json();
+      return json.map((item: any) => ({
+        ...item,
+        height: randomHeight(),
+      }));
+    } catch (err) {
+      console.error("Error fetching gallery:", err);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const items = await fetchGallery();
+      setData(items);
+      setLoading(false);
+    })();
+  }, []);
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#000",
+        }}
+      >
+        <LottieView
+          source={require("../(tabs)/Fireloaderanimation.json")} // ✅ mete chemen animasyon ou
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
+        />
+      </View>
+    );
+  }
+
+  const selected = data.find((i) => i.id === id);
+  const others = data.filter((i) => i.id !== id);
 
   if (!selected) return null;
 
@@ -34,7 +93,7 @@ export default function GalleryDetail() {
       {/* Main content */}
       {selected.type === "image" ? (
         <Image
-          source={selected.source}
+          source={{ uri: selected.source }}
           style={{
             width,
             height: width * (4 / 3),
@@ -44,7 +103,7 @@ export default function GalleryDetail() {
         />
       ) : (
         <Video
-          source={selected.source}
+          source={{ uri: selected.source }}
           style={{
             width,
             height: width * (4 / 3),

@@ -8,16 +8,20 @@ export default function GalleryItem({ item, onPress }) {
   return (
     <Pressable onPress={() => onPress(item)} style={[styles.card, { height }]}>
       {item.type === "image" ? (
-        <Image source={item.source} style={styles.media} resizeMode="cover" />
+        <Image
+          source={{ uri: item.source }}
+          style={styles.media}
+          resizeMode="cover"
+        />
       ) : (
         <>
           {/* <Text>Video</Text> */}
           <Video
-            source={item.source}
+            source={{ uri: item.source }} // ✅ korije pou videyo
             style={styles.media}
             resizeMode="cover"
+            shouldPlay={true}
             isMuted
-            shouldPlay={false}
           />
           {/* 🔹 Play badge */}
           <View style={styles.playBadge}>

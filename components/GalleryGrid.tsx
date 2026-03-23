@@ -1,4 +1,4 @@
-import { View, ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import GalleryItem from "./GalleryItem";
 
 export default function GalleryGrid({ data, onPress }) {
