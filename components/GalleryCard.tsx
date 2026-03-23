@@ -54,7 +54,7 @@ export default function GalleryCard({ item, onPress }: Props) {
           style={{ width: "100%", height: item.height }}
           resizeMode="cover"
           isMuted
-          shouldPlay={false}
+          shouldPlay={true}
           onLoad={() => setLoaded(true)}
         />
       )}
