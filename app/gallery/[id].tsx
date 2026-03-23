@@ -68,7 +68,7 @@ export default function GalleryDetail() {
         }}
       >
         <LottieView
-          source={require("../(tabs)/Fireloaderanimation.json")} // ✅ mete chemen animasyon ou
+          source={require("../(tabs)/Basketball.json")} // ✅ mete chemen animasyon ou
           autoPlay
           loop
           style={{ width: 200, height: 200 }}
